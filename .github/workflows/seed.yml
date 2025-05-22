@@ -1,0 +1,37 @@
+name: Auto commit
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "* * * * *"
+
+jobs:
+  auto_commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3      
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          
+      - name: Set date variable
+        run: |
+          echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          
+      - name: Write the current date into a file
+        run: |
+          echo $date > CURRENT_DATE
+
+      - name: Commit changes
+        run: |          
+          git config --local user.email "${{ secrets.EMAIL }}"
+          git config --local user.name "Kongkawee"
+          git add CURRENT_DATE
+          git commit -m "Auto commit of $date" || echo "No changes to commit"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
