@@ -20,7 +20,7 @@ jobs:
 
       - name: Write date and commit
         run: |
-          echo "$(date +'%Y-%m-%d %H:%M:%S')" > CURRENT_DATE
+          echo "$(date +'%Y-%m-%d')" > CURRENT_DATE
           git config --local user.email "${{ secrets.EMAIL }}"
           git config --local user.name "Kongkawee"
           git add CURRENT_DATE
