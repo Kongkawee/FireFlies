@@ -18,21 +18,13 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Set date variable
-        run: echo "date=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
-
-      - name: Write the current date into a file
-        run: echo "$date" > CURRENT_DATE
-
-      - name: Configure git
+      - name: Write date and commit
         run: |
+          echo "$(date +'%Y-%m-%d %H:%M:%S')" > CURRENT_DATE
           git config --local user.email "${{ secrets.EMAIL }}"
           git config --local user.name "Kongkawee"
-
-      - name: Commit changes
-        run: |
           git add CURRENT_DATE
-          git commit -m "Auto commit of $date" || echo "No changes to commit"
+          git commit -m "Auto commit of $(date)" || echo "No changes to commit"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
